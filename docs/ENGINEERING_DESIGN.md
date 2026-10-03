@@ -428,3 +428,12 @@ Do not design infrastructure for these yet:
 - microservices
 
 Add them only when a concrete product requirement demands them.
+
+## Implemented local API additions
+
+- `GET /api/v1/entries/today?date=YYYY-MM-DD` accepts the browser's local journal day; without `date`, the configured Django local day is used.
+- `GET /api/v1/entries/random?date=YYYY-MM-DD&exclude=<id>` considers only entries before that day. Without `date`, it uses the configured local day.
+- `GET /api/v1/entries/export` downloads all journal entries as a `memoir-v1` JSON attachment. The same export is available through `manage.py export_journal`.
+- Whitespace-only new entries are rejected. Existing entries can be cleared intentionally.
+
+This implementation follows the local-only, single-user contract above. It must remain on localhost until authentication is added.
