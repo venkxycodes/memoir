@@ -56,7 +56,7 @@ export function JournalEditor({
     <section className="editor">
       <div className="page-topline">
         <span className="eyebrow">
-          {entry ? "FROM YOUR JOURNAL" : "YOUR SPACE, TODAY"}
+          {entry ? "FROM YOUR JOURNAL" : "WRITE DOWN YOUR THOUGHTS"}
         </span>
         {back && (
           <button className="text-button" onClick={back}>
@@ -66,15 +66,8 @@ export function JournalEditor({
       </div>
       <header className="editor-header">
         <h1>{dateLabel(date)}</h1>
-        <p className="date-note">
-          {entry
-            ? "A moment worth coming back to."
-            : "There’s no right way to begin."}
-        </p>
+        {entry && <p className="date-note">A moment worth coming back to.</p>}
       </header>
-      {!entry && (
-        <div className="prompt">What’s occupying your mind right now?</div>
-      )}
       <label className="sr-only" htmlFor="entry-title">
         Optional title
       </label>

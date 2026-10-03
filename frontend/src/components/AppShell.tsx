@@ -4,7 +4,7 @@ import type { View } from "../types/journal";
 const items: { label: View; icon: string }[] = [
   { label: "Today", icon: "○" },
   { label: "Journal", icon: "▤" },
-  { label: "Rediscover", icon: "" },
+  { label: "Rediscover", icon: "↻" },
   { label: "Search", icon: "⌕" },
 ];
 export function AppShell({
