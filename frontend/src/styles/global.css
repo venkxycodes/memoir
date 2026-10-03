@@ -191,9 +191,9 @@ h2 {
   padding: 0;
   border: 0;
   background: none;
-  font-weight: 500;
-  font-size: 17px;
-  line-height: 1.6;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.5;
   margin: 0 0 22px;
   outline: 0;
 }
@@ -210,14 +210,14 @@ h2 {
   outline: 0;
   padding: 0;
   background: transparent;
-  font-size: 18px;
-  line-height: 1.85;
+  font-size: 15px;
+  line-height: 1.7;
   caret-color: var(--accent);
   overflow: hidden;
 }
 .writing-surface::placeholder {
   color: #898290;
-  font-size: 17px;
+  font-size: inherit;
 }
 .editor-footer {
   border-top: 1px solid var(--border);
@@ -566,7 +566,7 @@ dialog p {
     font-size: 25px;
   }
   .writing-surface {
-    font-size: 17px;
+    font-size: 15px;
     min-height: 42vh;
   }
   .writing-surface::placeholder {
