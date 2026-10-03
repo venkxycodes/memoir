@@ -17,7 +17,6 @@ React + TypeScript
 ```
 
 V1 needs:
-- authentication
 - create/read/update/delete journal entries
 - today's entry
 - chronological entry history
@@ -31,28 +30,24 @@ No Redis, queues, vector database, event bus, or microservices.
 
 ## 2. Core Data Models
 
-### User
+### User identity
 
-Use Django's standard user/auth model rather than implementing authentication primitives ourselves.
+V1 is a local, single-user application and has no authentication or `User` table.
 
-Conceptually:
+Keep `user_id` on journal records as a simple integer so the data model can be extended to multiple users later. For V1, all records use:
 
 ```text
-User
-- id: UUID
-- email: string, unique
-- password_hash: string
-- created_at: timestamp
+user_id = 1
 ```
 
-Email is the login identifier.
+If multi-user support is added later, introduce a `User` table with an auto-incrementing integer primary key and convert `Entry.user_id` into a foreign key.
 
 ### Entry
 
 ```text
 Entry
-- id: UUID
-- user_id: FK -> User
+- id: bigint, auto-increment
+- user_id: bigint
 - title: string, nullable
 - content: text
 - entry_date: date
@@ -76,7 +71,7 @@ INDEX(user_id, entry_date DESC)
 INDEX(user_id, updated_at DESC)
 ```
 
-All entry queries must be scoped by the authenticated `user_id`.
+All V1 entry queries use `user_id = 1`.
 
 ### Mood
 
@@ -105,8 +100,6 @@ Base path:
 
 Use JSON request/response bodies.
 
-Authentication should use secure HTTP-only session cookies.
-
 Common errors:
 
 ```json
@@ -124,74 +117,12 @@ HTTP semantics:
 - `201` successful creation
 - `204` successful deletion
 - `400` invalid request
-- `401` unauthenticated
 - `404` resource not found
 - `409` conflicting daily entry
 
 ---
 
-## 4. Authentication APIs
-
-Django session authentication is sufficient for V1.
-
-### Register
-
-```http
-POST /api/v1/auth/register
-```
-
-Request:
-
-```json
-{
-  "email": "user@example.com",
-  "password": "..."
-}
-```
-
-Response:
-
-```json
-{
-  "user": {
-    "id": "uuid",
-    "email": "user@example.com"
-  }
-}
-```
-
-### Login
-
-```http
-POST /api/v1/auth/login
-```
-
-Request:
-
-```json
-{
-  "email": "user@example.com",
-  "password": "..."
-}
-```
-
-Creates the authenticated session cookie.
-
-### Logout
-
-```http
-POST /api/v1/auth/logout
-```
-
-### Current user
-
-```http
-GET /api/v1/auth/me
-```
-
----
-
-## 5. Entry APIs
+## 4. Entry APIs
 
 ### Get today's entry
 
@@ -203,7 +134,7 @@ If an entry exists:
 
 ```json
 {
-  "id": "uuid",
+  "id": 1,
   "title": null,
   "content": "Today was...",
   "entry_date": "2026-10-03",
@@ -242,7 +173,7 @@ The server rejects a second entry for the same user/date with `409`.
 GET /api/v1/entries/{entry_id}
 ```
 
-The entry must belong to the authenticated user.
+Fetch the entry with `user_id = 1`.
 
 ### Update entry
 
@@ -298,7 +229,7 @@ Response:
 {
   "results": [
     {
-      "id": "uuid",
+      "id": 1,
       "title": null,
       "preview": "Today was surprisingly...",
       "entry_date": "2026-10-03",
@@ -330,7 +261,7 @@ Response:
 {
   "results": [
     {
-      "id": "uuid",
+      "id": 1,
       "entry_date": "2026-09-27",
       "title": "Sunday cricket",
       "preview": "...played cricket in the evening..."
@@ -343,7 +274,7 @@ V1 can use PostgreSQL text search or simple case-insensitive matching.
 
 Do not add Elasticsearch or a vector database.
 
-Search must always be restricted to the authenticated user's entries.
+Search is restricted to `user_id = 1`.
 
 ---
 
@@ -355,7 +286,7 @@ Search must always be restricted to the authenticated user's entries.
 GET /api/v1/entries/random
 ```
 
-Returns one existing entry belonging to the authenticated user.
+Returns one existing entry for `user_id = 1`.
 
 Optional query:
 
@@ -425,44 +356,25 @@ This avoids a late-night entry unexpectedly appearing under the previous or next
 
 ---
 
-## 11. Security Rules
+## 10. Local Data Safety
 
-Every entry endpoint requires authentication.
+Memoir V1 is local-only and has no authentication boundary.
 
-Never query an entry using only:
-
-```python
-Entry.objects.get(id=entry_id)
-```
-
-Always scope ownership:
-
-```python
-Entry.objects.get(id=entry_id, user=request.user)
-```
-
-Additional requirements:
-- HTTP-only secure session cookies
-- CSRF protection
-- password hashing through Django
-- rate limiting on login/register
+Requirements:
 - journal contents must not appear in application logs
 - journal contents must not be sent to analytics
-- HTTPS in production
+- keep local database backups
+- do not expose the Django server publicly
 
 ---
 
-## 12. Django App Structure
+## 11. Django App Structure
 
 Keep backend organization straightforward:
 
 ```text
 backend/
   config/
-  accounts/
-    models.py
-    views.py
-    urls.py
   journal/
     models.py
     serializers.py
@@ -478,16 +390,11 @@ Django ORM is sufficient for normal data access.
 
 ---
 
-## 13. V1 API Surface
+## 12. V1 API Surface
 
 The complete initial API can remain this small:
 
 ```text
-POST   /api/v1/auth/register
-POST   /api/v1/auth/login
-POST   /api/v1/auth/logout
-GET    /api/v1/auth/me
-
 GET    /api/v1/entries/today
 GET    /api/v1/entries
 POST   /api/v1/entries
@@ -503,7 +410,7 @@ That is enough to build the complete V1 product.
 
 ---
 
-## 14. Deliberately Deferred
+## 13. Deliberately Deferred
 
 Do not design infrastructure for these yet:
 
