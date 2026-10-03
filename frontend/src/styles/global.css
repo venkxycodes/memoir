@@ -40,8 +40,8 @@ a {
 }
 button:focus-visible,
 a:focus-visible,
-input:focus-visible,
-textarea:focus-visible {
+input:not(.entry-title):focus-visible,
+textarea:not(.writing-surface):focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 5px;
 }
@@ -185,26 +185,15 @@ h2 {
   color: var(--muted);
   margin: 10px 0 0;
 }
-.prompt {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 17px;
-  background: #efeaf5;
-  border-radius: 8px;
-  color: #6d607e;
-  font-size: 13px;
-  margin-bottom: 34px;
-}
 .entry-title {
   display: block;
   width: 100%;
   padding: 0;
   border: 0;
   background: none;
-  font-weight: 500;
-  font-size: 17px;
-  line-height: 1.6;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.5;
   margin: 0 0 22px;
   outline: 0;
 }
@@ -221,14 +210,14 @@ h2 {
   outline: 0;
   padding: 0;
   background: transparent;
-  font-size: 18px;
-  line-height: 1.85;
+  font-size: 15px;
+  line-height: 1.7;
   caret-color: var(--accent);
   overflow: hidden;
 }
 .writing-surface::placeholder {
   color: #898290;
-  font-size: 17px;
+  font-size: inherit;
 }
 .editor-footer {
   border-top: 1px solid var(--border);
@@ -576,14 +565,8 @@ dialog p {
   h1 {
     font-size: 25px;
   }
-  .prompt {
-    padding: 12px;
-    font-size: 12px;
-    gap: 8px;
-    margin-bottom: 30px;
-  }
   .writing-surface {
-    font-size: 17px;
+    font-size: 15px;
     min-height: 42vh;
   }
   .writing-surface::placeholder {
@@ -642,4 +625,25 @@ dialog p {
     color: var(--muted);
     text-decoration: none;
   }
+}
+
+.entry-title:focus,
+.writing-surface:focus {
+  border: 0;
+  outline: none;
+  box-shadow: none;
+}
+.memory-mark {
+  width: 88px;
+  height: 88px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 32px;
+  color: var(--accent);
+  background: #eeeaf3;
+  border-radius: 50%;
+}
+.memory-mark svg {
+  width: 36px;
+  height: 36px;
 }

@@ -118,6 +118,19 @@ export function App() {
         ) : (
           <section className="rediscover collection">
             <div className="eyebrow">A LITTLE WAY BACK</div>
+            <div className="memory-mark" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M20 7v5h-5" />
+                <path d="M20 12a8 8 0 1 0-2.3 5.7M20 7v5" />
+              </svg>
+            </div>
             <h1>
               Some days deserve
               <br />a second visit.
