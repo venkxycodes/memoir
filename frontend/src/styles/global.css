@@ -1,5 +1,6 @@
 :root {
   font-family: "Open Sans", sans-serif;
+  --writing-font: "Courier New", Courier, "Liberation Mono", monospace;
   color: #252229;
   background: #f7f5fa;
   font-synthesis: none;
@@ -21,6 +22,12 @@ input,
 textarea {
   font: inherit;
   color: inherit;
+}
+input,
+textarea,
+[contenteditable="true"],
+[contenteditable="plaintext-only"] {
+  font-family: var(--writing-font);
 }
 button,
 a,
