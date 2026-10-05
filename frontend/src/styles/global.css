@@ -598,7 +598,9 @@ dialog p {
 }
 @media (max-width: 720px) {
   .app-shell {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    min-height: 100svh;
   }
   .sidebar {
     position: static;
@@ -637,6 +639,7 @@ dialog p {
     width: 17px;
   }
   .main-content {
+    flex: 1;
     padding: 36px 20px 50px;
   }
   .page-topline {
@@ -657,7 +660,7 @@ dialog p {
     font-size: 15px;
   }
   .editor-footer {
-    margin-top: 12px;
+    margin-top: auto;
   }
   .text-button {
     font-size: 11px;
