@@ -254,6 +254,10 @@ h2 {
 .editor-header {
   margin-bottom: 32px;
 }
+.editor-header h1 {
+  font-family: var(--writing-font);
+  text-transform: uppercase;
+}
 .date-note {
   font-size: 13px;
   color: var(--muted);
