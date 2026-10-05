@@ -221,6 +221,11 @@ button:hover {
 .collection {
   width: min(100%, 700px);
 }
+.editor {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
 .page-topline {
   display: flex;
   justify-content: space-between;
@@ -294,8 +299,18 @@ h2 {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-top: 12px;
+  margin-top: auto;
   padding-top: 8px;
+}
+@media (min-width: 721px) {
+  .main-content:has(.editor) {
+    padding-bottom: 28px;
+  }
+}
+@media (min-width: 721px) and (max-width: 1000px) {
+  .main-content:has(.editor) {
+    padding-bottom: 30px;
+  }
 }
 .quiet-note {
   font-size: 11px;
