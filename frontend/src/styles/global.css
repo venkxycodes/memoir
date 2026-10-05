@@ -149,6 +149,68 @@ button:hover {
 .export-link:hover {
   text-decoration: underline;
 }
+.sidebar-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+}
+.sidebar-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+.sidebar-toggle:hover {
+  background: #e7e0f0;
+}
+@media (min-width: 1001px) {
+  .sidebar-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .sidebar-toggle {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+  .app-shell--collapsed {
+    grid-template-columns: 76px minmax(0, 1fr);
+  }
+  .app-shell--collapsed .sidebar {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .app-shell--collapsed .brand {
+    justify-content: center;
+    margin-bottom: 50px;
+  }
+  .app-shell--collapsed .brand-mark {
+    margin-right: 0;
+  }
+  .app-shell--collapsed .brand-name,
+  .app-shell--collapsed .brand-caption,
+  .app-shell--collapsed .nav-label,
+  .app-shell--collapsed .export-label {
+    display: none;
+  }
+  .app-shell--collapsed .nav-item {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .app-shell--collapsed .sidebar-bottom {
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
 .main-content {
   padding: 76px 7%;
   display: flex;
