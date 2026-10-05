@@ -1,5 +1,6 @@
 :root {
   font-family: "Open Sans", sans-serif;
+  --writing-font: "Courier New", Courier, "Liberation Mono", monospace;
   color: #252229;
   background: #f7f5fa;
   font-synthesis: none;
@@ -21,6 +22,12 @@ input,
 textarea {
   font: inherit;
   color: inherit;
+}
+input,
+textarea,
+[contenteditable="true"],
+[contenteditable="plaintext-only"] {
+  font-family: var(--writing-font);
 }
 button,
 a,
@@ -142,6 +149,68 @@ button:hover {
 .export-link:hover {
   text-decoration: underline;
 }
+.sidebar-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+}
+.sidebar-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+.sidebar-toggle:hover {
+  background: #e7e0f0;
+}
+@media (min-width: 1001px) {
+  .sidebar-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .sidebar-toggle {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+  .app-shell--collapsed {
+    grid-template-columns: 76px minmax(0, 1fr);
+  }
+  .app-shell--collapsed .sidebar {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .app-shell--collapsed .brand {
+    justify-content: center;
+    margin-bottom: 50px;
+  }
+  .app-shell--collapsed .brand-mark {
+    margin-right: 0;
+  }
+  .app-shell--collapsed .brand-name,
+  .app-shell--collapsed .brand-caption,
+  .app-shell--collapsed .nav-label,
+  .app-shell--collapsed .export-label {
+    display: none;
+  }
+  .app-shell--collapsed .nav-item {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .app-shell--collapsed .sidebar-bottom {
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
 .main-content {
   padding: 76px 7%;
   display: flex;
@@ -151,6 +220,11 @@ button:hover {
 .editor,
 .collection {
   width: min(100%, 700px);
+}
+.editor {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 .page-topline {
   display: flex;
@@ -225,8 +299,18 @@ h2 {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-top: 30px;
-  padding-top: 18px;
+  margin-top: auto;
+  padding-top: 8px;
+}
+@media (min-width: 721px) {
+  .main-content:has(.editor) {
+    padding-bottom: 28px;
+  }
+}
+@media (min-width: 721px) and (max-width: 1000px) {
+  .main-content:has(.editor) {
+    padding-bottom: 30px;
+  }
 }
 .quiet-note {
   font-size: 11px;
@@ -255,7 +339,7 @@ h2 {
 .entry-actions {
   display: flex;
   justify-content: space-between;
-  margin-top: 28px;
+  margin-top: 8px;
   gap: 12px;
 }
 .text-button {
@@ -514,7 +598,9 @@ dialog p {
 }
 @media (max-width: 720px) {
   .app-shell {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    min-height: 100svh;
   }
   .sidebar {
     position: static;
@@ -553,6 +639,7 @@ dialog p {
     width: 17px;
   }
   .main-content {
+    flex: 1;
     padding: 36px 20px 50px;
   }
   .page-topline {
@@ -573,7 +660,7 @@ dialog p {
     font-size: 15px;
   }
   .editor-footer {
-    margin-top: 24px;
+    margin-top: auto;
   }
   .text-button {
     font-size: 11px;

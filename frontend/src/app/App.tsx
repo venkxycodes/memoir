@@ -21,7 +21,6 @@ export function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [empty, setEmpty] = useState(false);
-  const [revision, setRevision] = useState(0);
   const request = useRef(0);
   const navigate = (next: View) => {
     request.current++;
@@ -71,11 +70,6 @@ export function App() {
       if (generation === request.current) setLoading(false);
     }
   };
-  const deleted = () => {
-    setEntry(undefined);
-    setRevision((r) => r + 1);
-    navigate("Journal");
-  };
   return (
     <>
       <a
@@ -103,15 +97,14 @@ export function App() {
             key={`${entry.id}`}
             date={entry.entry_date}
             entry={entry}
-            onDeleted={deleted}
             back={() => navigate("Journal")}
             rediscover={view === "Rediscover" ? () => void random() : undefined}
           />
         ) : view === "Today" ? (
-          <TodayPage key={revision} onDeleted={deleted} />
+          <TodayPage />
         ) : view === "Journal" || view === "Search" ? (
           <JournalPage
-            key={view + revision}
+            key={view}
             search={view === "Search"}
             open={(id) => void open(id)}
           />
