@@ -294,8 +294,8 @@ h2 {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-top: 30px;
-  padding-top: 18px;
+  margin-top: 12px;
+  padding-top: 8px;
 }
 .quiet-note {
   font-size: 11px;
@@ -324,7 +324,7 @@ h2 {
 .entry-actions {
   display: flex;
   justify-content: space-between;
-  margin-top: 28px;
+  margin-top: 8px;
   gap: 12px;
 }
 .text-button {
@@ -642,7 +642,7 @@ dialog p {
     font-size: 15px;
   }
   .editor-footer {
-    margin-top: 24px;
+    margin-top: 12px;
   }
   .text-button {
     font-size: 11px;

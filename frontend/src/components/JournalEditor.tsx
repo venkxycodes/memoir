@@ -1,26 +1,20 @@
-import { useEffect, useRef, useState } from "react";
-import { apiRequest, dateLabel } from "../lib/api";
+import { useEffect, useRef } from "react";
+import { dateLabel } from "../lib/api";
 import { useJournalDraft } from "../hooks/useJournalDraft";
 import type { JournalEntry } from "../types/journal";
 export function JournalEditor({
   date,
   entry,
-  onDeleted,
   back,
   rediscover,
 }: {
   date: string;
   entry?: JournalEntry;
-  onDeleted: () => void;
   back?: () => void;
   rediscover?: () => void;
 }) {
   const draft = useJournalDraft(date, entry);
-  const [confirming, setConfirming] = useState(false);
-  const [deleting, setDeleting] = useState(false);
-  const [error, setError] = useState("");
   const textarea = useRef<HTMLTextAreaElement>(null);
-  const dialog = useRef<HTMLDialogElement>(null);
   useEffect(() => {
     if (draft.ready) textarea.current?.focus({ preventScroll: true });
   }, [draft.ready]);
@@ -30,28 +24,6 @@ export function JournalEditor({
       textarea.current.style.height = `${Math.max(360, textarea.current.scrollHeight)}px`;
     }
   }, [draft.content, draft.ready]);
-  useEffect(() => {
-    if (confirming) dialog.current?.showModal();
-    else dialog.current?.close();
-  }, [confirming]);
-  const remove = async () => {
-    setDeleting(true);
-    await draft.prepareDelete();
-    try {
-      await apiRequest(`/entries/${draft.id}`, { method: "DELETE" });
-      draft.discard();
-      try {
-        localStorage.removeItem(`memoir:draft:${date}`);
-      } catch {
-        /* entry removed on server */
-      }
-      onDeleted();
-    } catch {
-      draft.cancelDelete();
-      setError("Couldn’t delete this entry. Please try again.");
-      setDeleting(false);
-    }
-  };
   return (
     <section className="editor">
       <div className="page-topline">
@@ -110,48 +82,13 @@ export function JournalEditor({
           {draft.status}
         </button>
       </footer>
-      {(draft.id || rediscover) && (
+      {rediscover && (
         <div className="entry-actions">
-          {rediscover && (
-            <button className="subtle-button" onClick={rediscover}>
-              Take me somewhere else <span aria-hidden="true">↗</span>
-            </button>
-          )}
-          {draft.id && (
-            <button
-              className="text-button delete-button"
-              onClick={() => setConfirming(true)}
-            >
-              Delete entry
-            </button>
-          )}
+          <button className="text-button" onClick={rediscover}>
+            Take me somewhere else <span aria-hidden="true">↗</span>
+          </button>
         </div>
       )}
-      <dialog
-        ref={dialog}
-        onCancel={() => setConfirming(false)}
-        onClose={() => setConfirming(false)}
-      >
-        <h2>Delete this entry?</h2>
-        <p>This moment will be permanently removed from your journal.</p>
-        {error && <p role="alert">{error}</p>}
-        <div className="dialog-actions">
-          <button
-            className="subtle-button"
-            onClick={() => setConfirming(false)}
-            disabled={deleting}
-          >
-            Keep entry
-          </button>
-          <button
-            className="danger-button"
-            onClick={remove}
-            disabled={deleting}
-          >
-            {deleting ? "Deleting…" : "Delete entry"}
-          </button>
-        </div>
-      </dialog>
     </section>
   );
 }
